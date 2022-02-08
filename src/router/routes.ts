@@ -1,7 +1,8 @@
-import Home from '../pages/Home';
 import NotFound from '../pages/NotFound';
+import Dashboard from '../pages/Dashboard';
+import Stake from '../pages/Stake';
 
-interface IRoute {
+export interface IRoute {
     path: string;
     name: string;
     exact: boolean;
@@ -11,10 +12,16 @@ interface IRoute {
 
 export const routes: IRoute[] = [
     {
-        path: '/',
-        name: 'Home',
+        path: '/stake',
+        name: 'Stake',
         exact: true,
-        component: Home,
+        component: Stake,
+    },
+    {
+        path: '/dashboard',
+        name: 'Dashboard',
+        exact: true,
+        component: Dashboard,
     },
     {
         path: '*',

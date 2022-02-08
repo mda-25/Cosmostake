@@ -1,26 +1,17 @@
-import { useContext, useEffect, useMemo, useState } from 'react';
-import { LcdClient } from '@cosmjs/launchpad';
-import { store } from '../store';
+import { useState } from 'react';
 
-type TRequestProps = {
-    path: string;
-    options?: any;
+export type TFunc = {
+    (opt?: any): any;
 };
 
-const useRequest = ({ path, options }: TRequestProps) => {
-    const { chain } = useContext(store);
+const useRequest = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [resp, setResp] = useState<Array<any>>([]);
+    const [resp, setResp] = useState<any[]>([]);
 
-    const lcd = useMemo((): any => {
-        if (!chain) return null;
-        return new LcdClient(`https://lcd-${chain.node}.keplr.app`);
-    }, [chain]);
-
-    const request = async ({ path, options }: TRequestProps) => {
+    const request = async (func: TFunc, opt?: any) => {
         try {
             setIsLoading(true);
-            const data = await lcd.get(path, options);
+            const data = await func(opt);
             setResp(data.result);
         } catch (e: any) {
             console.error(e);
@@ -29,17 +20,10 @@ const useRequest = ({ path, options }: TRequestProps) => {
         }
     };
 
-    useEffect(() => {
-        if (!chain) return;
-        request({ path, options });
-    }, [chain]);
-
     return {
         request,
         isLoading,
         resp,
-        setResp,
-        setIsLoading,
     };
 };
 

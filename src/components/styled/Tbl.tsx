@@ -15,7 +15,7 @@ Tbl.Tr = styled.tr`
 
 Tbl.Th = styled.th`
     font-size: ${({ theme }) => theme.fs14};
-    color: ${({ theme }) => theme.gray};
+    color: ${({ theme }) => theme.gray.g20};
     text-transform: uppercase;
 `;
 
@@ -23,8 +23,8 @@ Tbl.THead = styled.thead`
     width: 100%;
     position: sticky;
     top: 0;
-    backdrop-filter: blur(20px);
-    background: rgba(136, 152, 170, 0.4);
+    backdrop-filter: blur(5px);
+    background: ${({ theme }) => theme.gradientTableHead};
 `;
 
 Tbl.TBody = styled.tbody`

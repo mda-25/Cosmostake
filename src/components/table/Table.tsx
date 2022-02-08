@@ -1,29 +1,18 @@
 import React from 'react';
-import { Spinner, Table as BTable } from 'react-bootstrap';
-import styled from 'styled-components';
+import { Table as BTable } from 'react-bootstrap';
 import Tbl from '../styled/Tbl';
 import Row from './Row';
 
 type TTable = {
     cols: any[];
     rows: any[];
-    isLoading: boolean;
 };
 
-const WrapperLoader = styled.div`
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    padding-top: 20px;
-`;
-
-const Table = ({ cols, rows, isLoading }: TTable) => {
+const Table = ({ cols, rows }: TTable) => {
     return (
         <>
-            {isLoading ? (
-                <WrapperLoader>
-                    <Spinner animation="border" role="status" />
-                </WrapperLoader>
+            {!rows.length && !rows ? (
+                <div>Not data</div>
             ) : (
                 <BTable>
                     <Tbl.THead>

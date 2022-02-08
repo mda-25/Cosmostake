@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import { routes } from './routes';
 import ScrollToTop from './ScrollToTop';
 
@@ -8,6 +8,8 @@ export const Routers = () => {
         <>
             <ScrollToTop />
             <Switch>
+                <Redirect exact from="/" to="/stake" />
+
                 {routes.map((route, index) => (
                     <Route
                         key={index}

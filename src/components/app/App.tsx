@@ -4,7 +4,6 @@ import { ThemeProvider } from 'styled-components';
 import GlobalStyles from '../styled/GlobalStyles';
 import { Normalize } from 'styled-normalize';
 import theme from '../../utils/theme';
-import '../../assets/scss/index.scss';
 import { StoreProvider } from '../../store';
 import LayoutDefault from '../../layouts/LayoutDefault';
 

@@ -1,10 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import './assets/scss/index.scss';
 import App from './components/app/App';
 import reportWebVitals from './reportWebVitals';
+import { Window as KeplrWindow } from '@keplr-wallet/types';
 
 declare global {
-    interface Window {
+    interface Window extends KeplrWindow {
         keplr: any;
         getOfflineSigner: any;
     }

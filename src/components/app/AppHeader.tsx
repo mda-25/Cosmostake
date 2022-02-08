@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { CustomContainer } from '../styled/Container';
 import Box from '../styled/Box';
 import { store } from '../../store';
+import AppChainList from './AppChainList';
 
 const TheHeader = styled.div`
     display: flex;
@@ -14,18 +15,11 @@ const TheHeader = styled.div`
     padding: 10px 0;
 `;
 
-const WrapperAddress = styled.div`
-    width: 200px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    color: white;
-`;
-
 const AppHeader = () => {
-    const { account, setAccount } = useContext(store);
+    const { account, setAccount, chain } = useContext(store);
 
     return (
-        <Box color="linear-gradient(210.55deg, #424a4f -3.02%, #131719 93.08%)">
+        <Box color="linear-gradient(-10deg, #424a4f -3.02%, #131719 50.08%)">
             <CustomContainer>
                 <TheHeader>
                     <Link to="/">
@@ -33,9 +27,11 @@ const AppHeader = () => {
                     </Link>
 
                     {account ? (
-                        <WrapperAddress>{account.address}</WrapperAddress>
+                        <AppChainList />
                     ) : (
-                        <Button onClick={setAccount}>Connect</Button>
+                        <Button onClick={() => setAccount(chain)}>
+                            Connect
+                        </Button>
                     )}
                 </TheHeader>
             </CustomContainer>
