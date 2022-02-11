@@ -6,8 +6,9 @@ import React, {
     useReducer,
 } from 'react';
 import { CHAIN_LIST_MAINNET } from '../utils/constants';
-import { checkWallet } from './methods/checkWallet';
+import { chooseAccount } from './methods/chooseAccount';
 import { IChainList } from '../interface/ChainList';
+// import checkChain from './methods/checkChain';
 
 type ActionType = {
     type: string;
@@ -15,7 +16,7 @@ type ActionType = {
 };
 
 interface IInitialState {
-    chain: IChainList;
+    chain?: IChainList;
     account?: any;
 }
 
@@ -45,20 +46,6 @@ const { Provider } = store;
 const StoreProvider: FC = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
 
-    const setChain = (chain: IChainList) => {
-        const localStoreChain = localStorage.getItem('chain');
-
-        if (chain) {
-            checkWallet(chain);
-
-            localStorage.setItem('chain', JSON.stringify(chain));
-            dispatch({ type: 'SET_CHAIN', payload: chain });
-        } else if (typeof localStoreChain === 'string') {
-            const locChain = JSON.parse(localStoreChain);
-            dispatch({ type: 'SET_CHAIN', payload: locChain });
-        }
-    };
-
     const setBalance = async (
         address: string,
         handleBalance: (address: string) => Promise<any>,
@@ -67,31 +54,27 @@ const StoreProvider: FC = ({ children }) => {
 
         dispatch({
             type: 'SET_BALANCE',
-            payload: bal.result[0],
+            payload: bal.data.result[0],
         });
     };
 
     const setAccount = async (chain: IChainList) => {
-        setChain(chain);
+        dispatch({ type: 'SET_CHAIN', payload: chain });
 
-        const account = await checkWallet(chain);
+        const account = await chooseAccount(chain);
 
         dispatch({ type: 'SET_ACCOUNT', payload: account });
+
+        localStorage.setItem('chain', JSON.stringify(chain));
     };
 
     useEffect(() => {
         const localStoreChain = localStorage.getItem('chain');
-
         if (typeof localStoreChain === 'string') {
             const localChain = JSON.parse(localStoreChain);
             setAccount(localChain);
         } else {
-            localStorage.setItem('chain', JSON.stringify(state.chain));
-            const localStoreChain = localStorage.getItem('chain');
-
-            if (typeof localStoreChain === 'string') {
-                setAccount(JSON.parse(localStoreChain));
-            }
+            setAccount(state.chain);
         }
     }, []);
 

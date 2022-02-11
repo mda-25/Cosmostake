@@ -1,8 +1,8 @@
-import { ChainInfos } from '../../config/config';
-import type { ChainInfo } from '@keplr-wallet/types';
 import { IChainList } from '../../interface/ChainList';
+import { ChainInfos } from '../../config/config';
+import { ChainInfo } from '@keplr-wallet/types';
 
-export const checkWallet = async (currChain: IChainList) => {
+export const chooseAccount = async (currChain: IChainList) => {
     if (!window.keplr || !window.getOfflineSigner) {
         console.log('Please install keplr extension');
     } else {

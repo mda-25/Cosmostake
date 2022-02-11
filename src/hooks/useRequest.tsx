@@ -12,7 +12,8 @@ const useRequest = () => {
         try {
             setIsLoading(true);
             const data = await func(opt);
-            setResp(data.result);
+
+            setResp(data.data.result);
         } catch (e: any) {
             console.error(e);
         } finally {

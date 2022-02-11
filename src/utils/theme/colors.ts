@@ -1,6 +1,8 @@
 export default {
     black: '#000',
     white: '#fff',
+    lightGreen: 'rgba(194,254,129,0.9)',
+    error: 'rgba(254,129,129,0.9)',
     blue: {
         b10: '#CCF3FF',
         b20: '#B7EEFF',

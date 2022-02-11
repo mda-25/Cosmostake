@@ -8,7 +8,7 @@ export const Routers = () => {
         <>
             <ScrollToTop />
             <Switch>
-                <Redirect exact from="/" to="/stake" />
+                <Redirect exact from="/" to="/dashboard" />
 
                 {routes.map((route, index) => (
                     <Route

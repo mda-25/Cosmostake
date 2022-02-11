@@ -4,7 +4,7 @@ import Table from '../components/table/Table';
 import useRequest from '../hooks/useRequest';
 import { formatToken, formatPercent } from '../utils/helpers';
 import Delegate from '../components/stake/Delegate';
-import useLcdSDK from '../hooks/useLcdSDK';
+import useApi from '../hooks/useApi';
 import { store } from '../store';
 import { Spinner } from 'react-bootstrap';
 import { FlexJustifyCenter } from '../components/styled/Flex';
@@ -17,7 +17,7 @@ const WrapperTable = styled.div`
 
 const Stake = () => {
     const { chain, account } = useContext(store);
-    const { API } = useLcdSDK(chain);
+    const { API } = useApi(chain);
     const { resp, isLoading, request } = useRequest();
 
     useEffect(() => {
@@ -42,7 +42,7 @@ const Stake = () => {
             label: 'Name',
             process(data: any): JSX.Element {
                 return (
-                    <div style={{ width: '250px' }}>
+                    <div style={{ width: '225px' }}>
                         {data.description.moniker}
                     </div>
                 );
@@ -74,7 +74,11 @@ const Stake = () => {
             key: 'button',
             label: '',
             process(data: any): JSX.Element {
-                return <Delegate data={data} />;
+                return (
+                    <div style={{ width: '80px' }}>
+                        <Delegate data={data} />
+                    </div>
+                );
             },
         },
     ];

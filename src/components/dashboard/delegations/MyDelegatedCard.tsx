@@ -10,6 +10,7 @@ import LayoutModal from '../../LayoutModal';
 import FormUndelegate from './FormUndelegate';
 import type { IOption } from '../../../hooks/useStargateSDK';
 import { Card } from '../../styled/Card';
+import BtnCopy from '../../BtnCopy';
 
 export interface IDelegatedProps {
     delegate: {
@@ -26,7 +27,7 @@ export interface IDelegatedProps {
 const MyDelegatedCard = ({ delegate, handleUndelegate }: IDelegatedProps) => {
     const { chain } = useContext(store);
     const { show, handleShow, handleClose } = useShowModal();
-    const { balance, delegation } = delegate;
+    const { delegation } = delegate;
 
     return (
         <Card>
@@ -34,12 +35,13 @@ const MyDelegatedCard = ({ delegate, handleUndelegate }: IDelegatedProps) => {
             <Card.Body>
                 <Card.Title>
                     Validator: {ellipsis(delegation.validator_address, 15, -5)}
+                    <BtnCopy textToCopy={delegation.validator_address} />
                 </Card.Title>
 
                 <Card.Text>
                     Balance:{' '}
                     {formatMinimalDenomToCoinDenom(
-                        balance.amount,
+                        Number(delegation.shares),
                         chain.coinDenom,
                     )}
                 </Card.Text>

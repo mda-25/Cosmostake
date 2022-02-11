@@ -1,6 +1,7 @@
 import { coin, SigningStargateClient, StdFee } from '@cosmjs/stargate';
 import { useCallback, useState } from 'react';
 import { IChainList } from '../interface/ChainList';
+import toastrHandle from '../utils/toastrHandle';
 
 export interface IOption {
     from: string;
@@ -29,7 +30,7 @@ const useStargateSDK = (chain: IChainList) => {
         );
     }, [chain]);
 
-    const gas_limit = '200000';
+    const gas_limit = '80000';
     const fee: StdFee = {
         amount: [coin(1, 'uatom')],
         gas: gas_limit,
@@ -39,7 +40,15 @@ const useStargateSDK = (chain: IChainList) => {
         const rpc = await client();
         try {
             setLoading(true);
-            await rpc.delegateTokens(from, to, coin(amount, denom), fee);
+
+            await toastrHandle(
+                rpc.delegateTokens(
+                    from,
+                    to,
+                    coin(Math.floor(amount), denom),
+                    fee,
+                ),
+            );
         } catch (e) {
             console.error(e);
         } finally {
@@ -51,7 +60,14 @@ const useStargateSDK = (chain: IChainList) => {
         const rpc = await client();
         try {
             setLoading(true);
-            await rpc.undelegateTokens(from, to, coin(amount, denom), fee);
+            await toastrHandle(
+                rpc.undelegateTokens(
+                    from,
+                    to,
+                    coin(Math.floor(amount), denom),
+                    fee,
+                ),
+            );
         } catch (e) {
             console.error(e);
         } finally {
@@ -64,7 +80,7 @@ const useStargateSDK = (chain: IChainList) => {
 
         try {
             setLoading(true);
-            await rpc.withdrawRewards(delegate, validator, fee);
+            await toastrHandle(rpc.withdrawRewards(delegate, validator, fee));
         } catch (e: any) {
             console.error(e);
         } finally {

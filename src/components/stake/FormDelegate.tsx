@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { Button, InputGroup } from 'react-bootstrap';
 import { store } from '../../store';
 import {
@@ -7,6 +7,8 @@ import {
 } from '../../utils/helpers';
 import { WrapperBtn } from '../styled/Btn';
 import { Form } from '../styled/Form';
+import { Formik, Field } from 'formik';
+import * as yup from 'yup';
 
 interface IFormProps {
     handleClose(): void;
@@ -14,17 +16,18 @@ interface IFormProps {
     validator: string;
 }
 
+const schema = yup.object().shape({
+    amount: yup.number().required('Required').min(0.1, 'Minimum value is 0.1'),
+});
+
 const FormDelegate = ({
     handleClose,
     validator,
     handleDelegate,
 }: IFormProps) => {
     const { chain, balance } = useContext(store);
-    const [amount, setAmount] = useState<number>(0);
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-
+    const handleSubmit = async (amount: number | string) => {
         handleDelegate({
             to: validator,
             amount,
@@ -33,62 +36,87 @@ const FormDelegate = ({
         handleClose();
     };
 
-    const handleMaxAmount = () => {
-        setAmount(convertMutezToInt(balance.amount));
-    };
-
     return (
-        <Form onSubmit={handleSubmit}>
-            <Form.Group>
-                <Form.Label>Delegate to</Form.Label>
-                <Form.Control value={validator} disabled />
-            </Form.Group>
+        <Formik
+            validationSchema={schema}
+            initialValues={{
+                amount: '',
+                balance: balance.amount,
+            }}
+            onSubmit={(values) => {
+                handleSubmit(values.amount);
+            }}
+        >
+            {({
+                handleSubmit,
+                handleChange,
+                values,
+                errors,
+                setFieldValue,
+            }) => (
+                <Form noValidate onSubmit={handleSubmit}>
+                    <Form.Group>
+                        <Form.Label>Delegate to</Form.Label>
+                        <Form.Control value={validator} disabled />
+                    </Form.Group>
 
-            <Form.Group>
-                <Form.Label>
-                    Available balance:{' '}
-                    {formatMinimalDenomToCoinDenom(
-                        balance.amount,
-                        chain.coinDenom,
-                    )}
-                </Form.Label>
-            </Form.Group>
+                    <Form.Group>
+                        <Form.Label>
+                            Available balance:{' '}
+                            {formatMinimalDenomToCoinDenom(
+                                balance ? balance.amount : 0,
+                                chain.coinDenom,
+                            )}
+                        </Form.Label>
+                    </Form.Group>
 
-            <div>
-                <Form.Label>Amount to Delegate</Form.Label>
-                <InputGroup>
-                    <Form.Control
-                        type="number"
-                        placeholder="Enter amount"
-                        value={amount || ''}
-                        onChange={(e) => {
-                            setAmount(Number(e.target.value));
-                        }}
-                        required
-                    />
-                    <Button
-                        variant="outline-primary"
-                        id="button-addon2"
-                        onClick={handleMaxAmount}
-                    >
-                        max
-                    </Button>
-                    <Form.Control.Feedback type="invalid">
-                        not Available
-                    </Form.Control.Feedback>
-                </InputGroup>
-            </div>
+                    <div>
+                        <Form.Label>Amount to Delegate</Form.Label>
+                        <InputGroup>
+                            <Field
+                                as={Form.Control}
+                                type="number"
+                                name="amount"
+                                placeholder="Enter amount"
+                                value={values.amount}
+                                onChange={handleChange}
+                                isInvalid={!!errors.amount}
+                            />
+                            <Field
+                                as={Button}
+                                variant="primary"
+                                id="button-addon2"
+                                onClick={() =>
+                                    setFieldValue(
+                                        'amount',
+                                        convertMutezToInt(balance.amount),
+                                    )
+                                }
+                            >
+                                max
+                            </Field>
+                            <Form.Control.Feedback type="invalid">
+                                {errors.amount}
+                            </Form.Control.Feedback>
+                        </InputGroup>
+                    </div>
 
-            <WrapperBtn>
-                <Button variant="secondary" type="button" onClick={handleClose}>
-                    Close
-                </Button>
+                    <WrapperBtn>
+                        <Button
+                            variant="secondary"
+                            type="button"
+                            onClick={handleClose}
+                        >
+                            Close
+                        </Button>
 
-                <Button variant="primary" type="submit">
-                    Delegate
-                </Button>
-            </WrapperBtn>
-        </Form>
+                        <Button variant="primary" type="submit">
+                            Delegate
+                        </Button>
+                    </WrapperBtn>
+                </Form>
+            )}
+        </Formik>
     );
 };
 

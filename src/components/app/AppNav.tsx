@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo } from 'react';
+import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { store } from '../../store';
 import { CHAIN_LIST_MAINNET, CHAIN_LIST_TESTNET } from '../../utils/constants';
@@ -7,11 +7,12 @@ import {
     ellipsis,
     formatMinimalDenomToCoinDenom,
 } from '../../utils/helpers';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 import { Text } from '../styled/Text';
 import { Flex } from '../styled/Flex';
-import useLcdSDK from '../../hooks/useLcdSDK';
+import useApi from '../../hooks/useApi';
 import useThemeContext from '../../hooks/useThemeContext';
+import BtnCopy from '../BtnCopy';
 
 const WrapperList = styled.div`
     padding: 10px 20px;
@@ -80,8 +81,8 @@ const AppNav = () => {
     const theme = useThemeContext();
     const { setAccount, chain, account, setBalance, balance } =
         useContext(store);
-    const { API } = useLcdSDK(chain);
-    const location = useLocation();
+    const { API } = useApi(chain);
+    const history = useHistory();
 
     useEffect(() => {
         if (account) {
@@ -89,15 +90,19 @@ const AppNav = () => {
         }
     }, [account]);
 
-    const isActiveItem = useMemo(() => {
-        return location.pathname.includes('stake');
-    }, [location]);
+    const handleSetAccount = (chooseChain: any) => {
+        setAccount(chooseChain);
+        history.replace(`/stake/${chooseChain.chainId}`);
+    };
 
     return (
         <WrapperList>
             {account && (
                 <WrapperAccount>
-                    <Text fs="18px">{ellipsis(account.address)}</Text>
+                    <Text fs="18px">
+                        {ellipsis(account.address)}
+                        <BtnCopy textToCopy={account.address} />
+                    </Text>
 
                     <div>
                         <h5>Balance</h5>
@@ -125,13 +130,11 @@ const AppNav = () => {
                 {CHAIN_LIST_MAINNET.map((blockchain, i) => (
                     <Li
                         key={i}
-                        as={NavLink}
-                        to="/stake"
-                        onClick={() => setAccount(blockchain)}
+                        // as={NavLink}
+                        // to={`/stake/${blockchain.chainId}`}
+                        onClick={() => handleSetAccount(blockchain)}
                         activeitem={
-                            chain.name === blockchain.name && isActiveItem
-                                ? theme.blue.b60
-                                : ''
+                            chain.name === blockchain.name ? theme.blue.b60 : ''
                         }
                     >
                         {capitalizeLetters(blockchain.name)}
@@ -145,13 +148,11 @@ const AppNav = () => {
                 {CHAIN_LIST_TESTNET.map((blockchain, i) => (
                     <Li
                         key={i}
-                        as={NavLink}
-                        to="/stake"
-                        onClick={() => setAccount(blockchain)}
+                        // as={NavLink}
+                        // to={`/stake/${blockchain.chainId}`}
+                        onClick={() => handleSetAccount(blockchain)}
                         activeitem={
-                            chain.name === blockchain.name && isActiveItem
-                                ? theme.blue.b60
-                                : ''
+                            chain.name === blockchain.name ? theme.blue.b60 : ''
                         }
                     >
                         {capitalizeLetters(blockchain.name)}

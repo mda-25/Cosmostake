@@ -12,7 +12,7 @@ export interface IRoute {
 
 export const routes: IRoute[] = [
     {
-        path: '/stake',
+        path: '/stake/:id',
         name: 'Stake',
         exact: true,
         component: Stake,

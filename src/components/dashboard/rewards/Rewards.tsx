@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useMemo } from 'react';
 import { store } from '../../../store';
-import useLcdSDK from '../../../hooks/useLcdSDK';
+import useApi from '../../../hooks/useApi';
 import useRequest from '../../../hooks/useRequest';
 import useStargateSDK from '../../../hooks/useStargateSDK';
 import MyRewardCard from './MyRewardCard';
@@ -8,12 +8,7 @@ import { Spinner } from 'react-bootstrap';
 import styled from 'styled-components';
 import { Flex, FlexJustifyCenter } from '../../styled/Flex';
 import { formatMinimalDenomToCoinDenom } from '../../../utils/helpers';
-
-const WrapperDashboardInfo = styled.div`
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-gap: 10px;
-`;
+import { WrapperDashboardInfo } from '../styles/WrapperDashboard';
 
 const WrapperContent = styled(Flex)`
     flex-direction: column;
@@ -22,7 +17,7 @@ const WrapperContent = styled(Flex)`
 
 const Rewards = () => {
     const { account, chain, setBalance } = useContext(store);
-    const { API } = useLcdSDK(chain);
+    const { API } = useApi(chain);
     const { Claim } = useStargateSDK(chain);
     const rewardsRequest: any = useRequest();
 
@@ -33,13 +28,9 @@ const Rewards = () => {
     }, [account]);
 
     const handleClaim = async (validator: string) => {
-        try {
-            await Claim({ delegate: account.address, validator });
-            await rewardsRequest.request(API.getReward, account.address);
-            await setBalance(account.address, API.getBalance);
-        } catch (e: any) {
-            console.error(e);
-        }
+        await Claim({ delegate: account.address, validator });
+        await rewardsRequest.request(API.getReward, account.address);
+        await setBalance(account.address, API.getBalance);
     };
 
     const rewards = useMemo(() => {

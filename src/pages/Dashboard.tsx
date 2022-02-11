@@ -3,6 +3,7 @@ import Delegations from '../components/dashboard/delegations/Delegations';
 import { Tab, Tabs as BTabs } from 'react-bootstrap';
 import styled from 'styled-components';
 import Rewards from '../components/dashboard/rewards/Rewards';
+import UnbondingDelegations from '../components/dashboard/unbonding-delegations/UnbondingDelegations';
 
 const Tabs = styled(BTabs)`
     margin-bottom: 20px;
@@ -31,6 +32,9 @@ const Dashboard = () => {
                 </Tab>
                 <Tab eventKey="rewards" title="My rewards">
                     <Rewards />
+                </Tab>
+                <Tab eventKey="unbonding" title="Unbonding delegations">
+                    <UnbondingDelegations />
                 </Tab>
             </Tabs>
         </div>

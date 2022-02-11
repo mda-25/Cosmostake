@@ -5,7 +5,7 @@ import FormDelegate from './FormDelegate';
 import useShowModal from '../../hooks/useShowModal';
 import { capitalizeLetters, convertIntToMutez } from '../../utils/helpers';
 import useStargateSDK from '../../hooks/useStargateSDK';
-import useLcdSDK from '../../hooks/useLcdSDK';
+import useApi from '../../hooks/useApi';
 import { store } from '../../store';
 
 type TDelegationProps = {
@@ -23,21 +23,17 @@ const Delegate = ({ data }: TDelegationProps) => {
     const { show, handleShow, handleClose } = useShowModal();
     const { operator_address: validator, description } = data;
     const { Delegate } = useStargateSDK(chain);
-    const { API } = useLcdSDK(chain);
+    const { API } = useApi(chain);
 
     const handleDelegate = async ({ to, amount }: THandleDelegateProps) => {
-        try {
-            await Delegate({
-                from: account.address,
-                to,
-                amount: convertIntToMutez(amount),
-                denom: chain.coinMinimalDenom,
-            });
+        await Delegate({
+            from: account.address,
+            to,
+            amount: convertIntToMutez(amount),
+            denom: chain.coinMinimalDenom,
+        });
 
-            await setBalance(account.address, API.getBalance);
-        } catch (e: any) {
-            console.error(e);
-        }
+        await setBalance(account.address, API.getBalance);
     };
 
     return (
