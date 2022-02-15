@@ -21,7 +21,11 @@ const Delegate = ({ data }: TDelegationProps) => {
     const { account, chain, setBalance } = useContext(store);
 
     const { show, handleShow, handleClose } = useShowModal();
-    const { operator_address: validator, description } = data;
+    const {
+        operator_address: validator,
+        description,
+        min_self_delegation,
+    } = data;
     const { Delegate } = useStargateSDK(chain);
     const { API } = useApi(chain);
 

@@ -9,8 +9,9 @@ import useShowModal from '../../../hooks/useShowModal';
 import LayoutModal from '../../LayoutModal';
 import FormUndelegate from './FormUndelegate';
 import type { IOption } from '../../../hooks/useStargateSDK';
-import { Card } from '../../styled/Card';
+import Card from '../../styled/Card';
 import BtnCopy from '../../BtnCopy';
+import { FlexAlignCenter } from '../../styled/Flex';
 
 export interface IDelegatedProps {
     delegate: {
@@ -33,10 +34,10 @@ const MyDelegatedCard = ({ delegate, handleUndelegate }: IDelegatedProps) => {
         <Card>
             <Card.Header as="h5">Delegated</Card.Header>
             <Card.Body>
-                <Card.Title>
+                <FlexAlignCenter>
                     Validator: {ellipsis(delegation.validator_address, 15, -5)}
                     <BtnCopy textToCopy={delegation.validator_address} />
-                </Card.Title>
+                </FlexAlignCenter>
 
                 <Card.Text>
                     Balance:{' '}

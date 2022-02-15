@@ -1,11 +1,12 @@
 import React, { useContext } from 'react';
-import { Card } from '../../styled/Card';
+import Card from '../../styled/Card';
 import {
     ellipsis,
     formatMinimalDenomToCoinDenom,
 } from '../../../utils/helpers';
 import { Button } from 'react-bootstrap';
 import { store } from '../../../store';
+import { FlexAlignCenter } from '../../styled/Flex';
 
 interface IRewardsProps {
     data: any;
@@ -22,9 +23,9 @@ const MyRewardCard = ({ data, handleClaim }: IRewardsProps) => {
         <Card>
             <Card.Header as="h5">Reward</Card.Header>
             <Card.Body>
-                <Card.Title>
+                <FlexAlignCenter>
                     Validator: {ellipsis(data.validator_address, 15, -5)}
-                </Card.Title>
+                </FlexAlignCenter>
 
                 <Card.Text>
                     Rewards:{' '}

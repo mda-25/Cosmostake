@@ -1,14 +1,7 @@
-import React, {
-    createContext,
-    FC,
-    useEffect,
-    useMemo,
-    useReducer,
-} from 'react';
+import React, { createContext, FC, useMemo, useReducer } from 'react';
 import { CHAIN_LIST_MAINNET } from '../utils/constants';
 import { chooseAccount } from './methods/chooseAccount';
 import { IChainList } from '../interface/ChainList';
-// import checkChain from './methods/checkChain';
 
 type ActionType = {
     type: string;
@@ -21,7 +14,7 @@ interface IInitialState {
 }
 
 const initialState: IInitialState = {
-    chain: CHAIN_LIST_MAINNET[0],
+    // chain: CHAIN_LIST_MAINNET[0],
 };
 
 const reducer = (state = initialState, action: ActionType) => {
@@ -59,24 +52,23 @@ const StoreProvider: FC = ({ children }) => {
     };
 
     const setAccount = async (chain: IChainList) => {
+        localStorage.setItem('chain', JSON.stringify(chain));
+
         dispatch({ type: 'SET_CHAIN', payload: chain });
 
         const account = await chooseAccount(chain);
-
         dispatch({ type: 'SET_ACCOUNT', payload: account });
-
-        localStorage.setItem('chain', JSON.stringify(chain));
     };
 
-    useEffect(() => {
+    window.onload = async () => {
         const localStoreChain = localStorage.getItem('chain');
         if (typeof localStoreChain === 'string') {
             const localChain = JSON.parse(localStoreChain);
-            setAccount(localChain);
+            await setAccount(localChain);
         } else {
-            setAccount(state.chain);
+            await setAccount(CHAIN_LIST_MAINNET[0]);
         }
-    }, []);
+    };
 
     const provider = useMemo(() => {
         return {

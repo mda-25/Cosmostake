@@ -1,10 +1,11 @@
 import { IChainList } from '../../interface/ChainList';
 import { ChainInfos } from '../../config/config';
 import { ChainInfo } from '@keplr-wallet/types';
+import { toast } from 'react-toastify';
 
 export const chooseAccount = async (currChain: IChainList) => {
     if (!window.keplr || !window.getOfflineSigner) {
-        console.log('Please install keplr extension');
+        toast.error('Install keplr wallet');
     } else {
         const addChain = ChainInfos.find(
             (chain: ChainInfo) => chain.chainId === currChain.chainId,
@@ -16,13 +17,13 @@ export const chooseAccount = async (currChain: IChainList) => {
                 console.error('Failed to suggest the chain');
             }
         }
+
+        await window.keplr.enable(currChain.chainId);
+
+        const offlineSigner = window.getOfflineSigner(currChain.chainId);
+        offlineSigner.signAmino = offlineSigner.signAmino || offlineSigner.sign;
+        const accounts = await offlineSigner.getAccounts();
+
+        return accounts[0];
     }
-
-    await window.keplr.enable(currChain.chainId);
-
-    const offlineSigner = window.getOfflineSigner(currChain.chainId);
-    offlineSigner.signAmino = offlineSigner.signAmino || offlineSigner.sign;
-    const accounts = await offlineSigner.getAccounts();
-
-    return accounts[0];
 };

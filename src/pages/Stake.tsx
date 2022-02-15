@@ -16,15 +16,15 @@ const WrapperTable = styled.div`
 `;
 
 const Stake = () => {
-    const { chain, account } = useContext(store);
+    const { chain } = useContext(store);
     const { API } = useApi(chain);
     const { resp, isLoading, request } = useRequest();
 
     useEffect(() => {
-        if (account) {
+        if (chain) {
             request(API.getValidators);
         }
-    }, [account]);
+    }, [chain]);
 
     const validators = useMemo(() => {
         if (!resp || !resp.length) return [];

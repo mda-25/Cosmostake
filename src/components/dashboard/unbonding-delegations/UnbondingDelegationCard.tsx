@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card } from '../../styled/Card';
+import Card from '../../styled/Card';
 import BtnCopy from '../../BtnCopy';
 import {
     ellipsis,
@@ -7,6 +7,7 @@ import {
     formatMinimalDenomToCoinDenom,
 } from '../../../utils/helpers';
 import styled from 'styled-components';
+import { FlexAlignCenter } from '../../styled/Flex';
 
 interface IUnbDelegProps {
     data: {
@@ -29,10 +30,10 @@ const UnbondingDelegationCard = ({ data }: IUnbDelegProps) => {
         <Card>
             <Card.Header as="h5">Unbonding delegation</Card.Header>
             <Card.Body>
-                <Card.Title>
+                <FlexAlignCenter>
                     Validator: {ellipsis(data.validator_address)}
                     <BtnCopy textToCopy={data.validator_address} />
-                </Card.Title>
+                </FlexAlignCenter>
 
                 <WrapperEntries>
                     {data.entries.map((elem, i) => (

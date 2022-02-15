@@ -17,7 +17,13 @@ interface IFormProps {
 }
 
 const schema = yup.object().shape({
-    amount: yup.number().required('Required').min(0.1, 'Minimum value is 0.1'),
+    amount: yup
+        .number()
+        .required('Required')
+        .min(0.1, 'Minimum value is 0.1')
+        .test('amount', 'Max value', (val: any, props: any) => {
+            return val < props.parent.balance;
+        }),
 });
 
 const FormDelegate = ({
@@ -41,7 +47,7 @@ const FormDelegate = ({
             validationSchema={schema}
             initialValues={{
                 amount: '',
-                balance: balance.amount,
+                balance: convertMutezToInt(balance.amount),
             }}
             onSubmit={(values) => {
                 handleSubmit(values.amount);
@@ -89,7 +95,9 @@ const FormDelegate = ({
                                 onClick={() =>
                                     setFieldValue(
                                         'amount',
-                                        convertMutezToInt(balance.amount),
+                                        Math.floor(
+                                            convertMutezToInt(balance.amount),
+                                        ),
                                     )
                                 }
                             >

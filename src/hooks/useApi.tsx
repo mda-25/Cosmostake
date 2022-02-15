@@ -1,11 +1,20 @@
 import { useMemo } from 'react';
 import axios from 'axios';
 import { IChainList } from '../interface/ChainList';
+import { CHAIN_LIST_MAINNET } from '../utils/constants';
 
 const useApi = (chain: IChainList) => {
     const api = useMemo(() => {
+        const localStoreChain = localStorage.getItem('chain');
+        if (typeof localStoreChain === 'string') {
+            const localChain = JSON.parse(localStoreChain);
+            return axios.create({
+                baseURL: localChain.rest,
+                timeout: 30000,
+            });
+        }
         return axios.create({
-            baseURL: chain.rest,
+            baseURL: CHAIN_LIST_MAINNET[0].rest,
             timeout: 30000,
         });
     }, [chain]);

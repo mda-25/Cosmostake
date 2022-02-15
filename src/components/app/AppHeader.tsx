@@ -4,7 +4,6 @@ import { Button, Image } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { CustomContainer } from '../styled/Container';
 import Box from '../styled/Box';
-// import { store } from '../../store';
 import AppChainList from './AppChainList';
 
 const TheHeader = styled.div`
@@ -16,8 +15,6 @@ const TheHeader = styled.div`
 `;
 
 const AppHeader = () => {
-    // const { account, setAccount, chain } = useContext(store);
-
     return (
         <Box color="linear-gradient(-10deg, #424a4f -3.02%, #131719 50.08%)">
             <CustomContainer>
@@ -27,13 +24,6 @@ const AppHeader = () => {
                     </Link>
 
                     <AppChainList />
-                    {/*{account ? (*/}
-                    {/*    */}
-                    {/*) : (*/}
-                    {/*    <Button onClick={() => setAccount(chain)}>*/}
-                    {/*        Connect*/}
-                    {/*    </Button>*/}
-                    {/*)}*/}
                 </TheHeader>
             </CustomContainer>
         </Box>

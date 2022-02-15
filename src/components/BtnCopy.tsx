@@ -14,7 +14,7 @@ const BtnCopy = ({ textToCopy }: IBtnCopy) => {
     return (
         <CopyToClipboard text={textToCopy}>
             <Button variant="link" onClick={copy}>
-                <Files style={{ verticalAlign: 'baseline' }} />
+                <Files />
             </Button>
         </CopyToClipboard>
     );

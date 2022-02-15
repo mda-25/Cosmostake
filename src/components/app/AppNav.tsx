@@ -8,11 +8,11 @@ import {
     formatMinimalDenomToCoinDenom,
 } from '../../utils/helpers';
 import { NavLink, useHistory } from 'react-router-dom';
-import { Text } from '../styled/Text';
-import { Flex } from '../styled/Flex';
+import { Flex, FlexAlignCenter } from '../styled/Flex';
 import useApi from '../../hooks/useApi';
 import useThemeContext from '../../hooks/useThemeContext';
 import BtnCopy from '../BtnCopy';
+import { Wallet2 } from 'react-bootstrap-icons';
 
 const WrapperList = styled.div`
     padding: 10px 20px;
@@ -26,6 +26,11 @@ const WrapperAccount = styled(Flex)`
     flex-direction: column;
     gap: 20px;
     min-height: 75px;
+`;
+
+const WrapperBalance = styled(Flex)`
+    flex-direction: column;
+    gap: 5px;
 `;
 
 const ChainList = styled.ul`
@@ -97,24 +102,42 @@ const AppNav = () => {
 
     return (
         <WrapperList>
-            {account && (
-                <WrapperAccount>
-                    <Text fs="18px">
+            <WrapperAccount>
+                {account ? (
+                    <FlexAlignCenter>
+                        <Wallet2
+                            size="20px"
+                            style={{
+                                marginRight: '10px',
+                                verticalAlign: 'baseline',
+                            }}
+                        />
                         {ellipsis(account.address)}
                         <BtnCopy textToCopy={account.address} />
-                    </Text>
+                    </FlexAlignCenter>
+                ) : (
+                    <Flex>
+                        <a
+                            href="https://chrome.google.com/webstore/detail/keplr/dmkamcknogkgcdfhhbddcghachkejeap?hl=ru"
+                            target="_blank"
+                            rel="noreferrer"
+                        >
+                            <h5>(Keplr wallet not installed)</h5>
+                        </a>
+                    </Flex>
+                )}
 
-                    <div>
-                        <h5>Balance</h5>
-                        <h5>
-                            {formatMinimalDenomToCoinDenom(
-                                balance ? balance.amount : 0,
-                                chain.coinDenom,
-                            )}
-                        </h5>
-                    </div>
-                </WrapperAccount>
-            )}
+                <WrapperBalance>
+                    <span>Available Balance</span>
+
+                    <h5>
+                        {formatMinimalDenomToCoinDenom(
+                            balance?.amount,
+                            chain?.coinDenom,
+                        )}
+                    </h5>
+                </WrapperBalance>
+            </WrapperAccount>
 
             <Divider />
 
@@ -130,11 +153,11 @@ const AppNav = () => {
                 {CHAIN_LIST_MAINNET.map((blockchain, i) => (
                     <Li
                         key={i}
-                        // as={NavLink}
-                        // to={`/stake/${blockchain.chainId}`}
                         onClick={() => handleSetAccount(blockchain)}
                         activeitem={
-                            chain.name === blockchain.name ? theme.blue.b60 : ''
+                            chain?.name === blockchain.name
+                                ? theme.blue.b60
+                                : ''
                         }
                     >
                         {capitalizeLetters(blockchain.name)}
@@ -148,11 +171,11 @@ const AppNav = () => {
                 {CHAIN_LIST_TESTNET.map((blockchain, i) => (
                     <Li
                         key={i}
-                        // as={NavLink}
-                        // to={`/stake/${blockchain.chainId}`}
                         onClick={() => handleSetAccount(blockchain)}
                         activeitem={
-                            chain.name === blockchain.name ? theme.blue.b60 : ''
+                            chain?.name === blockchain.name
+                                ? theme.blue.b60
+                                : ''
                         }
                     >
                         {capitalizeLetters(blockchain.name)}
