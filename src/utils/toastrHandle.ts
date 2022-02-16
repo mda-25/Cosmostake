@@ -1,22 +1,14 @@
 import { toast } from 'react-toastify';
-
-interface IToastrProps {
-    promiseFunc(): Promise<any>;
-    opt: {
-        pending: string;
-        success: string;
-        error: string;
-    };
-}
+import { DeliverTxResponse } from '@cosmjs/stargate';
 
 const toastrHandle = (
     promiseFunc: any,
     opt = {
         pending: 'Waiting for dispatch',
-        success: 'Success!',
+        // success: 'Success!',
         error: 'Promise rejected',
     },
-) => {
+): Promise<DeliverTxResponse> => {
     return toast.promise(promiseFunc, opt);
 };
 

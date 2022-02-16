@@ -19,7 +19,7 @@ function App() {
                     <LayoutDefault />
                     <Toastr
                         position="top-right"
-                        autoClose={3000}
+                        autoClose={4000}
                         hideProgressBar={true}
                         closeOnClick
                         pauseOnHover={false}

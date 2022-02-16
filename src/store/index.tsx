@@ -17,7 +17,7 @@ const store = createContext<any>({
 const { Provider } = store;
 
 const StoreProvider: FC = ({ children }) => {
-    const [chain, setChain] = useState<IChainList>();
+    const [chain, setChain] = useState<any>();
     const [account, setAcc] = useState();
     const [balance, setBal] = useState();
 
@@ -28,7 +28,7 @@ const StoreProvider: FC = ({ children }) => {
         try {
             const bal = await handleBalance(address);
 
-            setBal(bal.data.result[0]);
+            setBal(bal.data.balances[0]);
         } catch (e: any) {
             console.error(e);
         }

@@ -5,19 +5,22 @@ import MyDelegatedCard from './MyDelegatedCard';
 import { Spinner } from 'react-bootstrap';
 import { store } from '../../../store';
 import { FlexJustifyCenter } from '../../styled/Flex';
-import useStargateSDK, { IOption } from '../../../hooks/useStargateSDK';
+import useStargateSDK, {
+    IOption,
+    IRedelegate,
+} from '../../../hooks/useStargateSDK';
 import { convertIntToMutez } from '../../../utils/helpers';
 import { WrapperDashboardInfo } from '../styles/WrapperDashboard';
 
 const Delegations = () => {
     const { account, chain, setBalance } = useContext(store);
     const { API } = useApi(chain);
-    const delegate = useRequest();
-    const { Undelegate } = useStargateSDK(chain);
+    const { resp, request, isLoading } = useRequest();
+    const { Undelegate, Redelegate } = useStargateSDK(chain);
 
     useEffect(() => {
         if (account) {
-            delegate.request(API.getDelegations, account.address);
+            request(API.getDelegations, account.address);
         }
     }, [account]);
 
@@ -29,28 +32,47 @@ const Delegations = () => {
             denom,
         });
         await setBalance(account.address, API.getBalance);
-        await delegate.request(API.getDelegations, account.address);
+        await request(API.getDelegations, account.address);
+    };
+
+    const handleRedelegate = async ({
+        delegator,
+        validatorFrom,
+        validatorTo,
+        amount,
+        denom,
+    }: IRedelegate) => {
+        await Redelegate({
+            delegator,
+            validatorFrom,
+            validatorTo,
+            amount: convertIntToMutez(amount),
+            denom,
+        });
+        await setBalance(account.address, API.getBalance);
+        await request(API.getDelegations, account.address);
     };
 
     const myDelegate = useMemo(() => {
-        if (!delegate.resp) return [];
+        if (!Object.keys(resp)) return [];
 
-        return delegate.resp;
-    }, [delegate.resp]);
+        return resp.delegation_responses;
+    }, [resp]);
 
     return (
         <div>
-            {delegate.isLoading ? (
+            {isLoading ? (
                 <FlexJustifyCenter>
                     <Spinner animation="border" variant="primary" />
                 </FlexJustifyCenter>
-            ) : myDelegate.length ? (
+            ) : myDelegate ? (
                 <WrapperDashboardInfo>
-                    {myDelegate.map((delegate, i) => (
+                    {myDelegate.map((delegate: any, i: number) => (
                         <MyDelegatedCard
                             key={i}
                             delegate={delegate}
                             handleUndelegate={handleUndelegate}
+                            handleRedelegate={handleRedelegate}
                         />
                     ))}
                 </WrapperDashboardInfo>

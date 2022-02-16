@@ -8,26 +8,31 @@ import { store } from '../../../store';
 import useShowModal from '../../../hooks/useShowModal';
 import LayoutModal from '../../LayoutModal';
 import FormUndelegate from './FormUndelegate';
-import type { IOption } from '../../../hooks/useStargateSDK';
+import type { IOption, IRedelegate } from '../../../hooks/useStargateSDK';
 import Card from '../../styled/Card';
 import BtnCopy from '../../BtnCopy';
 import { FlexAlignCenter } from '../../styled/Flex';
+import { GridColumns } from '../../styled/Grid';
+import FormRedelegate from './FormRedelegate';
+import { IDelegatedProps } from '../../../interface/Delegate';
 
-export interface IDelegatedProps {
-    delegate: {
-        delegation: {
-            delegator_address: string;
-            shares: string;
-            validator_address: string;
-        };
-        balance: any;
-    };
+interface IDelegateEvents extends IDelegatedProps {
     handleUndelegate(opt?: IOption): void;
+    handleRedelegate(opt?: IRedelegate): void;
 }
 
-const MyDelegatedCard = ({ delegate, handleUndelegate }: IDelegatedProps) => {
+const MyDelegatedCard = ({
+    delegate,
+    handleRedelegate,
+    handleUndelegate,
+}: IDelegateEvents) => {
     const { chain } = useContext(store);
     const { show, handleShow, handleClose } = useShowModal();
+    const {
+        show: showRedelegate,
+        handleShow: handleShowRedelegate,
+        handleClose: handleCloseRedelegate,
+    } = useShowModal();
     const { delegation } = delegate;
 
     return (
@@ -47,9 +52,15 @@ const MyDelegatedCard = ({ delegate, handleUndelegate }: IDelegatedProps) => {
                     )}
                 </Card.Text>
 
-                <Button variant="primary" onClick={handleShow}>
-                    Undelegate
-                </Button>
+                <GridColumns col="repeat(2, 1fr)" gap="10px">
+                    <Button variant="primary" onClick={handleShow}>
+                        Undelegate
+                    </Button>
+
+                    <Button variant="primary" onClick={handleShowRedelegate}>
+                        Redelegate
+                    </Button>
+                </GridColumns>
 
                 <LayoutModal
                     handleClose={handleClose}
@@ -59,7 +70,19 @@ const MyDelegatedCard = ({ delegate, handleUndelegate }: IDelegatedProps) => {
                     <FormUndelegate
                         delegate={delegate}
                         handleClose={handleClose}
-                        handleUndelegate={handleUndelegate}
+                        handleRequest={handleUndelegate}
+                    />
+                </LayoutModal>
+
+                <LayoutModal
+                    handleClose={handleCloseRedelegate}
+                    show={showRedelegate}
+                    title="Redelegate"
+                >
+                    <FormRedelegate
+                        delegate={delegate}
+                        handleClose={handleCloseRedelegate}
+                        handleRequest={handleRedelegate}
                     />
                 </LayoutModal>
             </Card.Body>

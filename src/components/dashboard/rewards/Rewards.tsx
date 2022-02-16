@@ -34,7 +34,7 @@ const Rewards = () => {
     };
 
     const rewards = useMemo(() => {
-        if (Array.isArray(rewardsRequest.resp)) return {};
+        if (!Object.keys(rewardsRequest.resp)) return {};
 
         return rewardsRequest.resp;
     }, [rewardsRequest.resp]);
@@ -45,7 +45,7 @@ const Rewards = () => {
                 <FlexJustifyCenter>
                     <Spinner animation="border" />
                 </FlexJustifyCenter>
-            ) : rewards.rewards && rewards.total ? (
+            ) : rewards.rewards && rewards.total.length ? (
                 <WrapperContent>
                     <h5>
                         Total rewards:
@@ -56,13 +56,16 @@ const Rewards = () => {
                     </h5>
 
                     <WrapperDashboardInfo>
-                        {rewards.rewards.map((elem: any, i: number) => (
-                            <MyRewardCard
-                                key={i}
-                                data={elem}
-                                handleClaim={handleClaim}
-                            />
-                        ))}
+                        {rewards.rewards.map(
+                            (elem: any, i: number) =>
+                                !!elem.reward.length && (
+                                    <MyRewardCard
+                                        key={i}
+                                        data={elem}
+                                        handleClaim={handleClaim}
+                                    />
+                                ),
+                        )}
                     </WrapperDashboardInfo>
                 </WrapperContent>
             ) : (

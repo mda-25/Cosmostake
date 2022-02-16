@@ -1,53 +1,44 @@
-import React, { useContext } from 'react';
+import React from 'react';
+import { Form } from '../../styled/Form';
 import { Button, InputGroup } from 'react-bootstrap';
-import { store } from '../../store';
-import {
-    convertMutezToInt,
-    formatMinimalDenomToCoinDenom,
-} from '../../utils/helpers';
-import { WrapperBtn } from '../styled/Btn';
-import { Form } from '../styled/Form';
+import { WrapperBtn } from '../../styled/Btn';
+import { convertMutezToInt } from '../../../utils/helpers';
 import { Formik, Field } from 'formik';
 import * as yup from 'yup';
+import { IRedelegate } from '../../../hooks/useStargateSDK';
+import { IDelegatedProps } from '../../../interface/Delegate';
 
-interface IFormProps {
+interface IRedelegateProps extends IDelegatedProps {
     handleClose(): void;
-    handleDelegate({ to, amount }: any): void;
-    validator: string;
-    minDelegation: string;
+    handleRequest(opt?: IRedelegate): void;
 }
 
 const schema = yup.object().shape({
     amount: yup
         .number()
         .required('Required')
-        // .min(0.1, 'Minimum value is 0.1')
-        .max(1000000, 'Maximum value is 1000000')
-        // .test('amount', 'Max value', (val: any, props: any) => {
-        //     if (val < 1000000) {
-        //         return true;
-        //     }
-        //     return val < props.parent.balance;
-        // })
         .test(
             'amount',
-            'Min value',
-            (val: any, props: any) => val >= props.parent.minDelegation,
+            'Max value',
+            (val: any, props: any) => val <= props.parent.balance,
         ),
+    validatorTo: yup.string().required('Required'),
 });
 
-const FormDelegate = ({
+const FormRedelegate = ({
+    delegate,
     handleClose,
-    validator,
-    handleDelegate,
-    minDelegation,
-}: IFormProps) => {
-    const { chain, balance } = useContext(store);
+    handleRequest,
+}: IRedelegateProps) => {
+    const { delegation, balance } = delegate;
 
-    const handleSubmit = async (amount: number | string) => {
-        handleDelegate({
-            to: validator,
+    const handleSubmit = (amount: number, validatorTo: string) => {
+        handleRequest({
+            delegator: delegation.delegator_address,
+            validatorFrom: delegation.validator_address,
+            validatorTo,
             amount,
+            denom: balance.denom,
         });
 
         handleClose();
@@ -58,11 +49,13 @@ const FormDelegate = ({
             validationSchema={schema}
             initialValues={{
                 amount: '',
+                validatorTo: '',
                 balance: convertMutezToInt(balance.amount),
-                minDelegation,
             }}
             onSubmit={(values) => {
-                handleSubmit(values.amount);
+                if (typeof values.amount !== 'string') {
+                    handleSubmit(values.amount, values.validatorTo);
+                }
             }}
         >
             {({
@@ -72,20 +65,28 @@ const FormDelegate = ({
                 errors,
                 setFieldValue,
             }) => (
-                <Form noValidate onSubmit={handleSubmit}>
+                <Form onSubmit={handleSubmit}>
                     <Form.Group>
-                        <Form.Label>Delegate to</Form.Label>
-                        <Form.Control value={validator} disabled />
+                        <Form.Label>Validator current</Form.Label>
+                        <Form.Control
+                            value={delegation.validator_address}
+                            disabled
+                        />
                     </Form.Group>
 
                     <Form.Group>
-                        <Form.Label>
-                            Available balance:{' '}
-                            {formatMinimalDenomToCoinDenom(
-                                balance ? balance.amount : 0,
-                                chain.coinDenom,
-                            )}
-                        </Form.Label>
+                        <Form.Label>Validator to</Form.Label>
+                        <Field
+                            as={Form.Control}
+                            name="validatorTo"
+                            value={values.validatorTo}
+                            onChange={handleChange}
+                            isInvalid={!!errors.validatorTo}
+                        />
+
+                        <Form.Control.Feedback type="invalid">
+                            {errors.validatorTo}
+                        </Form.Control.Feedback>
                     </Form.Group>
 
                     <div>
@@ -93,28 +94,27 @@ const FormDelegate = ({
                         <InputGroup>
                             <Field
                                 as={Form.Control}
-                                type="number"
                                 name="amount"
+                                type="number"
                                 placeholder="Enter amount"
                                 value={values.amount}
                                 onChange={handleChange}
                                 isInvalid={!!errors.amount}
                             />
-                            <Field
-                                as={Button}
-                                variant="primary"
+                            <Button
+                                variant="outline-primary"
                                 id="button-addon2"
                                 onClick={() =>
                                     setFieldValue(
                                         'amount',
-                                        Math.floor(
-                                            convertMutezToInt(balance.amount),
+                                        convertMutezToInt(
+                                            Number(delegation.shares),
                                         ),
                                     )
                                 }
                             >
                                 max
-                            </Field>
+                            </Button>
                             <Form.Control.Feedback type="invalid">
                                 {errors.amount}
                             </Form.Control.Feedback>
@@ -131,7 +131,7 @@ const FormDelegate = ({
                         </Button>
 
                         <Button variant="primary" type="submit">
-                            Delegate
+                            Redelegate
                         </Button>
                     </WrapperBtn>
                 </Form>
@@ -140,4 +140,4 @@ const FormDelegate = ({
     );
 };
 
-export default FormDelegate;
+export default FormRedelegate;

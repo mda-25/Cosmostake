@@ -31,7 +31,7 @@ const MyRewardCard = ({ data, handleClaim }: IRewardsProps) => {
                     Rewards:{' '}
                     {data.reward
                         ? formatMinimalDenomToCoinDenom(
-                              data.reward[0].amount,
+                              data.reward.length ? data.reward[0].amount : 0,
                               chain.coinDenom,
                           )
                         : '0'}

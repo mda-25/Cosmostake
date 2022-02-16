@@ -27,9 +27,9 @@ const Stake = () => {
     }, [chain]);
 
     const validators = useMemo(() => {
-        if (!resp || !resp.length) return [];
+        if (!Object.keys(resp)) return [];
 
-        return resp;
+        return resp.validators;
     }, [resp]);
 
     const cols = [
@@ -92,10 +92,12 @@ const Stake = () => {
                         variant="primary"
                     />
                 </FlexJustifyCenter>
-            ) : (
+            ) : validators ? (
                 <WrapperTable>
                     <Table cols={cols} rows={validators} />
                 </WrapperTable>
+            ) : (
+                <FlexJustifyCenter>Not validators</FlexJustifyCenter>
             )}
         </>
     );

@@ -6,14 +6,14 @@ export type TFunc = {
 
 const useRequest = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [resp, setResp] = useState<any[]>([]);
+    const [resp, setResp] = useState<any>({});
 
     const request = async (func: TFunc, opt?: any) => {
         try {
             setIsLoading(true);
             const data = await func(opt);
 
-            setResp(data.data.result);
+            setResp(data.data);
         } catch (e: any) {
             console.error(e);
         } finally {

@@ -55,6 +55,7 @@ const Delegate = ({ data }: TDelegationProps) => {
                     validator={validator}
                     handleClose={handleClose}
                     handleDelegate={handleDelegate}
+                    minDelegation={min_self_delegation}
                 />
             </LayoutModal>
         </>

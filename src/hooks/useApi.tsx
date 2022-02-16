@@ -21,20 +21,27 @@ const useApi = (chain: IChainList) => {
 
     const API = {
         getValidators() {
-            return api.get('/staking/validators');
+            // return api.get('/staking/validators');
+            return api.get('/cosmos/staking/v1beta1/validators');
         },
         getDelegations(address?: string) {
-            return api.get(`/staking/delegators/${address}/delegations`);
+            return api.get(`/cosmos/staking/v1beta1/delegations/${address}`);
+            // return api.get(`/staking/delegators/${address}/delegations`);
         },
         getReward(delegator: string) {
-            return api.get(`/distribution/delegators/${delegator}/rewards`);
+            return api.get(
+                `/cosmos/distribution/v1beta1/delegators/${delegator}/rewards`,
+            );
+            // return api.get(`/distribution/delegators/${delegator}/rewards`);
         },
         getBalance(address: string) {
-            return api.get(`/bank/balances/${address}`);
+            return api.get(`/cosmos/bank/v1beta1/balances/${address}`);
+            // return api.get(`/bank/balances/${address}`);
         },
         getUnbondingDelegation(address: string) {
             return api.get(
-                `/staking/delegators/${address}/unbonding_delegations`,
+                `/cosmos/staking/v1beta1/delegators/${address}/unbonding_delegations`,
+                // `/staking/delegators/${address}/unbonding_delegations`,
             );
         },
     };

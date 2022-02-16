@@ -1,29 +1,38 @@
 import React from 'react';
-import { IDelegatedProps } from './MyDelegatedCard';
 import { Form } from '../../styled/Form';
 import { Button, InputGroup } from 'react-bootstrap';
 import { WrapperBtn } from '../../styled/Btn';
 import { convertMutezToInt } from '../../../utils/helpers';
 import { Formik, Field } from 'formik';
 import * as yup from 'yup';
+import { IOption } from '../../../hooks/useStargateSDK';
+import { IDelegatedProps } from '../../../interface/Delegate';
 
 interface IUndelegateProps extends IDelegatedProps {
     handleClose(): void;
+    handleRequest(opt?: IOption): void;
 }
 
 const schema = yup.object().shape({
-    amount: yup.number().required('Required').min(0.1, 'Minimum value is 0.1'),
+    amount: yup
+        .number()
+        .required('Required')
+        .test(
+            'amount',
+            'Max value',
+            (val: any, props: any) => val <= props.parent.balance,
+        ),
 });
 
 const FormUndelegate = ({
     delegate,
     handleClose,
-    handleUndelegate,
+    handleRequest,
 }: IUndelegateProps) => {
     const { delegation, balance } = delegate;
 
     const handleSubmit = (amount: number) => {
-        handleUndelegate({
+        handleRequest({
             from: delegation.delegator_address,
             to: delegation.validator_address,
             amount,
@@ -36,7 +45,10 @@ const FormUndelegate = ({
     return (
         <Formik
             validationSchema={schema}
-            initialValues={{ amount: '' }}
+            initialValues={{
+                amount: '',
+                balance: convertMutezToInt(balance.amount),
+            }}
             onSubmit={(values) => {
                 if (typeof values.amount !== 'string') {
                     handleSubmit(values.amount);
