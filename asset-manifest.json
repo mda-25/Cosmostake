@@ -1,24 +1,24 @@
 {
   "files": {
-    "main.css": "/static/css/main.f51cbe2d.chunk.css",
-    "main.js": "/static/js/main.c2313784.chunk.js",
-    "main.js.map": "/static/js/main.c2313784.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.f3c5ef03.js",
-    "runtime-main.js.map": "/static/js/runtime-main.f3c5ef03.js.map",
-    "static/css/2.f4c56af9.chunk.css": "/static/css/2.f4c56af9.chunk.css",
-    "static/js/2.c4b7c176.chunk.js": "/static/js/2.c4b7c176.chunk.js",
-    "static/js/2.c4b7c176.chunk.js.map": "/static/js/2.c4b7c176.chunk.js.map",
-    "static/js/3.d5d4bb81.chunk.js": "/static/js/3.d5d4bb81.chunk.js",
-    "static/js/3.d5d4bb81.chunk.js.map": "/static/js/3.d5d4bb81.chunk.js.map",
-    "index.html": "/index.html",
-    "static/css/2.f4c56af9.chunk.css.map": "/static/css/2.f4c56af9.chunk.css.map",
-    "static/css/main.f51cbe2d.chunk.css.map": "/static/css/main.f51cbe2d.chunk.css.map",
-    "static/js/2.c4b7c176.chunk.js.LICENSE.txt": "/static/js/2.c4b7c176.chunk.js.LICENSE.txt"
+    "main.css": "/cosmostake/static/css/main.f51cbe2d.chunk.css",
+    "main.js": "/cosmostake/static/js/main.c2313784.chunk.js",
+    "main.js.map": "/cosmostake/static/js/main.c2313784.chunk.js.map",
+    "runtime-main.js": "/cosmostake/static/js/runtime-main.ec081be7.js",
+    "runtime-main.js.map": "/cosmostake/static/js/runtime-main.ec081be7.js.map",
+    "static/css/2.f4c56af9.chunk.css": "/cosmostake/static/css/2.f4c56af9.chunk.css",
+    "static/js/2.4d4b990a.chunk.js": "/cosmostake/static/js/2.4d4b990a.chunk.js",
+    "static/js/2.4d4b990a.chunk.js.map": "/cosmostake/static/js/2.4d4b990a.chunk.js.map",
+    "static/js/3.d5d4bb81.chunk.js": "/cosmostake/static/js/3.d5d4bb81.chunk.js",
+    "static/js/3.d5d4bb81.chunk.js.map": "/cosmostake/static/js/3.d5d4bb81.chunk.js.map",
+    "index.html": "/cosmostake/index.html",
+    "static/css/2.f4c56af9.chunk.css.map": "/cosmostake/static/css/2.f4c56af9.chunk.css.map",
+    "static/css/main.f51cbe2d.chunk.css.map": "/cosmostake/static/css/main.f51cbe2d.chunk.css.map",
+    "static/js/2.4d4b990a.chunk.js.LICENSE.txt": "/cosmostake/static/js/2.4d4b990a.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.f3c5ef03.js",
+    "static/js/runtime-main.ec081be7.js",
     "static/css/2.f4c56af9.chunk.css",
-    "static/js/2.c4b7c176.chunk.js",
+    "static/js/2.4d4b990a.chunk.js",
     "static/css/main.f51cbe2d.chunk.css",
     "static/js/main.c2313784.chunk.js"
   ]
