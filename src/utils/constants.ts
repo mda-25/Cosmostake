@@ -6,7 +6,7 @@ export const CHAIN_LIST_MAINNET: IChainList[] = [
         chainId: 'cosmoshub',
         coinMinimalDenom: 'uatom',
         coinDenom: 'ATOM',
-        rest: 'https://lcd-cosmoshub.keplr.app',
+        rest: 'https://api.cosmos.network',
         rpc: 'https://rpc.cosmos.network',
     },
     {

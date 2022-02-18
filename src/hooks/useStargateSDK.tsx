@@ -1,5 +1,5 @@
 import { coin, SigningStargateClient, StdFee } from '@cosmjs/stargate';
-import { useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { IChainList } from '../interface/ChainList';
 import toastrHandle from '../utils/toastrHandle';
 import { toast } from 'react-toastify';
@@ -35,13 +35,17 @@ const handleErr = (resp: any) => {
 const useStargateSDK = (chain: IChainList) => {
     const [isLoading, setLoading] = useState<boolean>(false);
 
-    const gas_limit = '80000';
+    // const gas_limit = '80000';
+    const gas_limit = useMemo(
+        () => (chain?.chainId === 'cosmoshub-testnet' ? '200000' : '80000'),
+        [chain],
+    );
     const fee: StdFee = {
         amount: [coin(1, 'uatom')],
         gas: gas_limit,
     };
 
-    const client = async (): Promise<SigningStargateClient> => {
+    const client = useCallback(async (): Promise<SigningStargateClient> => {
         const offlineSigner = window.getOfflineSigner(chain.chainId);
         offlineSigner.signAmino = offlineSigner.signAmino || offlineSigner.sign;
 
@@ -49,7 +53,7 @@ const useStargateSDK = (chain: IChainList) => {
             chain.rpc,
             offlineSigner,
         );
-    };
+    }, [chain]);
 
     const Delegate = async ({ from, to, amount, denom }: IOption) => {
         const rpc = await client();

@@ -19,7 +19,7 @@ const UnbondingDelegations = () => {
     }, [account]);
 
     const unbondingDelegations = useMemo(() => {
-        if (!Object.keys(resp)) return [];
+        if (!Object.keys(resp).length) return [];
 
         return resp.unbonding_responses;
     }, [resp]);
@@ -30,7 +30,7 @@ const UnbondingDelegations = () => {
                 <FlexJustifyCenter>
                     <Spinner animation="border" />
                 </FlexJustifyCenter>
-            ) : unbondingDelegations ? (
+            ) : unbondingDelegations.length ? (
                 <WrapperDashboardInfo>
                     {unbondingDelegations.map((elem: any, i: number) => (
                         <UnbondingDelegationCard key={i} data={elem} />

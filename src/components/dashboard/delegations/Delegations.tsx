@@ -54,7 +54,7 @@ const Delegations = () => {
     };
 
     const myDelegate = useMemo(() => {
-        if (!Object.keys(resp)) return [];
+        if (!Object.keys(resp).length) return [];
 
         return resp.delegation_responses;
     }, [resp]);
@@ -65,7 +65,7 @@ const Delegations = () => {
                 <FlexJustifyCenter>
                     <Spinner animation="border" variant="primary" />
                 </FlexJustifyCenter>
-            ) : myDelegate ? (
+            ) : myDelegate.length ? (
                 <WrapperDashboardInfo>
                     {myDelegate.map((delegate: any, i: number) => (
                         <MyDelegatedCard
